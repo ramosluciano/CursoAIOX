@@ -29,10 +29,5 @@
       "destination": "/index.html"
     }
   ],
-  "regions": ["sfo1"],
-  "functions": {
-    "api/**/*.ts": {
-      "maxDuration": 10
-    }
-  }
+  "regions": ["sfo1"]
 }
