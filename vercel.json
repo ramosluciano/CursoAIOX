@@ -1,10 +1,21 @@
 {
-  "projectName": "aiox-course-platform",
+  "projectName": "CursoAIOX",
   "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
   "outputDirectory": ".next",
   "framework": "nextjs",
+  "nodeVersion": "20.x",
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NEXT_PUBLIC_APP_URL": "@curso-aiox-url"
+  },
+  "envPrefix": "NEXT_PUBLIC_",
+  "regions": ["sfo1", "iad1"],
+  "functions": {
+    "api/**/*.ts": {
+      "maxDuration": 30
+    }
   },
   "headers": [
     {
@@ -13,6 +24,27 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=60, s-maxage=3600"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
+      ]
+    },
+    {
+      "source": "/:path*",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, s-maxage=3600"
         }
       ]
     }
@@ -23,17 +55,5 @@
       "destination": "/",
       "permanent": true
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/:path((?!api|_next).*)",
-      "destination": "/index.html"
-    }
-  ],
-  "regions": ["sfo1"],
-  "functions": {
-    "api/**/*.ts": {
-      "maxDuration": 10
-    }
-  }
+  ]
 }
