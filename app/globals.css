@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Markdown content styling */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h1 {
+  @apply text-4xl font-bold mt-8 mb-4 text-aiox-700 dark:text-aiox-accent;
+}
+
+.prose h2 {
+  @apply text-3xl font-bold mt-6 mb-3 text-aiox-600 dark:text-aiox-accent;
+  @apply border-b-2 border-aiox-purple dark:border-aiox-accent pb-2;
+}
+
+.prose h3 {
+  @apply text-2xl font-semibold mt-5 mb-2 text-aiox-500 dark:text-aiox-accent;
+}
+
+.prose p {
+  @apply my-4 leading-7 text-gray-700 dark:text-gray-300;
+}
+
+.prose code {
+  @apply bg-gray-100 dark:bg-slate-800 text-red-600 dark:text-orange-400 px-2 py-1 rounded font-mono text-sm;
+}
+
+.prose pre {
+  @apply bg-gray-900 dark:bg-slate-950 text-gray-100 dark:text-gray-200 p-4 rounded-lg overflow-x-auto my-4;
+}
+
+.prose pre code {
+  @apply text-gray-100 dark:text-gray-200 bg-transparent px-0 py-0;
+}
+
+.prose ul,
+.prose ol {
+  @apply my-4 ml-6;
+}
+
+.prose li {
+  @apply my-2 text-gray-700 dark:text-gray-300;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-aiox-purple dark:border-aiox-accent pl-4 italic text-gray-600 dark:text-gray-400 my-4;
+}
+
+.prose a {
+  @apply text-aiox-purple dark:text-aiox-accent font-semibold hover:text-aiox-600 dark:hover:text-aiox-accent/80 transition-colors;
+}
+
+.prose table {
+  @apply w-full border-collapse border border-gray-300 dark:border-slate-700 my-4;
+}
+
+.prose th {
+  @apply bg-aiox-100 dark:bg-slate-800 border border-gray-300 dark:border-slate-700 px-4 py-2 font-semibold text-gray-900 dark:text-gray-100;
+}
+
+.prose td {
+  @apply border border-gray-300 dark:border-slate-700 px-4 py-2 text-gray-700 dark:text-gray-300;
+}
+
+/* Checkbox styling */
+.prose input[type="checkbox"] {
+  @apply w-5 h-5 cursor-pointer accent-aiox-purple dark:accent-aiox-accent;
+}
+
+.prose-invert {
+  @apply text-gray-100;
+}
+
+/* Lesson card animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Progress bar animation */
+@keyframes progressFill {
+  from {
+    width: 0;
+  }
+}
+
+.progress-fill {
+  animation: progressFill 0.8s ease-out;
+}
