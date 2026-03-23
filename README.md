@@ -5,6 +5,7 @@ A modern, interactive learning platform for the AIOX (AI-Orchestrated System) de
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 ![Node](https://img.shields.io/badge/Node-20+-black)
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
+[![CI/CD Pipeline](https://github.com/monitoragindo/CursoAIOX/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/monitoragindo/CursoAIOX/actions/workflows/ci-cd.yml)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
 ---
@@ -250,12 +251,29 @@ Docker Image Size: ~200MB
 ./docker-build.sh up     # Start container
 ```
 
-### GitHub & Vercel
-See [GITHUB_SETUP.md](./GITHUB_SETUP.md) for complete guide:
-1. Push to GitHub
-2. Connect to Vercel
-3. Auto-deploy on push to main
-4. Custom domain (optional)
+### GitHub Actions & Vercel (Automated CI/CD)
+
+The project includes a complete **6-stage CI/CD pipeline**:
+
+1. **Lint & Format** - ESLint validation
+2. **Build & Test** - npm run build with output validation
+3. **Docker Build** - Multi-stage containerization
+4. **Deploy to Vercel** - Automatic production deployment (main branch only)
+5. **Health Check** - Verify deployment with 5 retries
+6. **Slack Notification** - Status alerts (optional)
+
+**Branch Strategy:**
+- `main` - Production (auto-deploys to Vercel)
+- `dev` - Staging (runs CI checks, no deploy)
+- `feature/*` - Feature branches (run CI checks)
+
+**Setup & Configuration:**
+- See [CI-CD.md](./CI-CD.md) for pipeline documentation
+- See [VERCEL-SETUP.md](./VERCEL-SETUP.md) for step-by-step Vercel setup
+
+**Monitor Deployments:**
+- GitHub Actions: https://github.com/monitoragindo/CursoAIOX/actions
+- Vercel Dashboard: https://vercel.com/dashboard/CursoAIOX/deployments
 
 ---
 
@@ -300,6 +318,8 @@ This project uses AIOX methodology:
 ## 📖 Documentation
 
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Local deployment guide
+- [CI-CD.md](./CI-CD.md) - GitHub Actions CI/CD pipeline documentation
+- [VERCEL-SETUP.md](./VERCEL-SETUP.md) - Step-by-step Vercel configuration guide
 - [GITHUB_SETUP.md](./GITHUB_SETUP.md) - GitHub & Vercel setup
 - [.claude/CLAUDE.md](./.claude/CLAUDE.md) - AIOX framework rules
 - [docs/](./docs/) - Course documentation
@@ -355,21 +375,28 @@ MIT License - feel free to use this for educational purposes
 |-----------|--------|
 | Local Development | ✅ Ready |
 | Docker | ✅ Ready |
-| GitHub Actions | ✅ Configured |
-| Vercel | ⏳ Setup Required |
-| Production | ⏳ Pending First Deploy |
+| GitHub Repository | ✅ Created & Configured |
+| GitHub Actions | ✅ Configured (6 jobs) |
+| Vercel Setup | ⏳ Awaiting Token Configuration |
+| Production Deployment | ⏳ Pending First Deploy |
 
 ---
 
 ## 🚀 Next Steps
 
 1. ✅ Local validation complete
-2. ⏳ Push to GitHub
-3. ⏳ Setup Vercel deployment
-4. ⏳ Configure CI/CD pipeline
-5. ⏳ Go live!
+2. ✅ GitHub repository created & CI/CD configured
+3. ⏳ **[NEXT] Setup Vercel & Configure Secrets**
+   - Create Vercel project & obtain tokens
+   - Add GitHub Secrets (VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID)
+   - See [VERCEL-SETUP.md](./VERCEL-SETUP.md) for detailed instructions
+4. ⏳ Create Pull Request from dev → main to test pipeline
+5. ⏳ Monitor first deployment & go live!
 
-See [GITHUB_SETUP.md](./GITHUB_SETUP.md) for step-by-step instructions.
+**Current Repository:**
+- GitHub: https://github.com/monitoragindo/CursoAIOX
+- Main branch: Ready for CI/CD automation
+- Dev branch: Ready for feature development
 
 ---
 
@@ -379,3 +406,7 @@ See [GITHUB_SETUP.md](./GITHUB_SETUP.md) for step-by-step instructions.
 **Next.js**: 14.2.35
 
 🌟 **Star this repo if you find it useful!**
+
+## ✅ Vercel Deployment Test
+
+Testing CI/CD pipeline with Vercel integration.
