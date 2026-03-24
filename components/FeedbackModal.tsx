@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, Send } from 'lucide-react';
+import { FEEDBACK_CATEGORIES } from '@/lib/feedback-categories';
 
 interface FeedbackModalProps {
   module: string;
@@ -34,11 +35,19 @@ export function FeedbackModal({ module, lesson, isOpen, onClose }: FeedbackModal
   async function loadCategories() {
     try {
       const res = await fetch('/api/feedback/categories');
-      const data = await res.json();
-      setCategories(data);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setCategories(data);
+          return;
+        }
+      }
     } catch (err) {
-      setError('Erro ao carregar categorias');
+      console.error('Erro ao carregar categorias da API:', err);
     }
+
+    // Fallback para categorias hardcoded
+    setCategories(FEEDBACK_CATEGORIES);
   }
 
   async function handleSubmit(e: React.FormEvent) {
