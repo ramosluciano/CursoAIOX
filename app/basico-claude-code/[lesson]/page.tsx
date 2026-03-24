@@ -54,7 +54,7 @@ export default async function LessonPage({ params }: PageProps) {
 
   // Remove disabled attributes from checkboxes to make them interactive
   htmlContent = htmlContent.replace(
-    /\s+disabled(?=[\s/>])/g,
+    /\s*\bdisabled(?:="")?(?=[\s/>])/g,
     ''
   );
 
