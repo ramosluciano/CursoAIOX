@@ -1,4 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { CheckCircle } from 'lucide-react';
 
 const LESSONS = [
   { slug: 'mastery-aula-01-internals', title: '01. Internals', description: 'AIOX internals' },
@@ -26,6 +30,33 @@ const LESSONS = [
 ];
 
 export default function MasteryPage() {
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+
+    const loadCompleted = () => {
+      const progress = localStorage.getItem('courseProgress');
+      if (progress) {
+        const progressData = JSON.parse(progress);
+        const completed = new Set<string>(progressData.completedLessons || []);
+        setCompletedLessons(completed);
+      }
+    };
+
+    loadCompleted();
+
+    const handleProgressUpdate = () => {
+      loadCompleted();
+    };
+
+    window.addEventListener('progressUpdate', handleProgressUpdate);
+    return () => {
+      window.removeEventListener('progressUpdate', handleProgressUpdate);
+    };
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="text-center">
@@ -34,26 +65,57 @@ export default function MasteryPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {LESSONS.map((lesson, index) => (
-          <Link
-            key={lesson.slug}
-            href={`/mastery/${lesson.slug}`}
-            className="group p-6 bg-white border border-gray-200 rounded-lg hover:border-aiox-accent hover:shadow-lg transition-all duration-300"
-          >
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-cyan-100 text-aiox-accent rounded-lg flex items-center justify-center font-bold group-hover:bg-aiox-accent group-hover:text-white transition-colors">
-                {String(index + 1).padStart(2, '0')}
+        {LESSONS.map((lesson, index) => {
+          const isCompleted = isMounted && completedLessons.has(`mastery/${lesson.slug}`);
+
+          return (
+            <Link
+              key={lesson.slug}
+              href={`/mastery/${lesson.slug}`}
+              className={`group p-6 rounded-lg border transition-all duration-300 ${
+                isCompleted
+                  ? 'bg-purple-50 border-aiox-accent/50 hover:border-aiox-accent'
+                  : 'bg-white border-gray-200 hover:border-aiox-accent'
+              } hover:shadow-lg`}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold transition-colors ${
+                  isCompleted
+                    ? 'bg-purple-200 text-aiox-accent'
+                    : 'bg-cyan-100 text-aiox-accent group-hover:bg-aiox-accent group-hover:text-white'
+                }`}>
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-start gap-2">
+                    <div className="flex-1">
+                      <h3 className={`font-bold text-lg transition-colors ${
+                        isCompleted
+                          ? 'text-aiox-accent line-through'
+                          : 'text-gray-900 group-hover:text-aiox-accent'
+                      }`}>
+                        {lesson.title}
+                      </h3>
+                      <p className={`text-sm mt-1 ${
+                        isCompleted ? 'text-aiox-accent/70' : 'text-gray-600'
+                      }`}>
+                        {lesson.description}
+                      </p>
+                    </div>
+                    {isCompleted && (
+                      <CheckCircle className="w-5 h-5 text-aiox-accent flex-shrink-0 mt-1" />
+                    )}
+                  </div>
+                </div>
+                <span className={`font-semibold opacity-0 group-hover:opacity-100 transition-opacity ${
+                  isCompleted ? 'text-aiox-accent' : 'text-aiox-accent'
+                }`}>
+                  →
+                </span>
               </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-lg text-gray-900 group-hover:text-aiox-accent transition-colors">
-                  {lesson.title}
-                </h3>
-                <p className="text-sm text-gray-600 mt-1">{lesson.description}</p>
-              </div>
-              <span className="text-aiox-accent font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
