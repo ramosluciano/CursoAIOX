@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useProgress, ModuleProgress } from '@/app/hooks/useProgress';
+
+interface ModuleProgress {
+  completed: number;
+  total: number;
+}
 
 interface ModuleCardProps {
   module: 'basico' | 'bootcamp' | 'mastery';
@@ -16,6 +20,12 @@ interface ModuleCardProps {
   badgeColor: string;
 }
 
+const LESSON_COUNTS = {
+  basico: 8,
+  bootcamp: 18,
+  mastery: 22,
+};
+
 export function ModuleCard({
   module,
   title,
@@ -27,31 +37,57 @@ export function ModuleCard({
   textColor,
   badgeColor,
 }: ModuleCardProps) {
-  const { getModuleProgress, mounted } = useProgress();
   const [progress, setProgress] = useState<(ModuleProgress & { percentage: number }) | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    if (mounted) {
-      const moduleProgress = getModuleProgress(module);
-      const percentage = moduleProgress.total > 0
-        ? Math.round((moduleProgress.completed / moduleProgress.total) * 100)
-        : 0;
-      setProgress({ ...moduleProgress, percentage });
-    }
-  }, [mounted, module, getModuleProgress]);
+    // Only run after mount to avoid hydration mismatch
+    setIsMounted(true);
 
-  useEffect(() => {
+    const loadProgress = () => {
+      try {
+        const stored = localStorage.getItem('courseProgress');
+        if (stored) {
+          const data = JSON.parse(stored);
+          const moduleProgress = data.moduleProgress?.[module] || {
+            completed: 0,
+            total: LESSON_COUNTS[module],
+          };
+          const percentage = moduleProgress.total > 0
+            ? Math.round((moduleProgress.completed / moduleProgress.total) * 100)
+            : 0;
+          setProgress({ ...moduleProgress, percentage });
+        } else {
+          setProgress({
+            completed: 0,
+            total: LESSON_COUNTS[module],
+            percentage: 0,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading progress:', error);
+        setProgress({
+          completed: 0,
+          total: LESSON_COUNTS[module],
+          percentage: 0,
+        });
+      }
+    };
+
+    loadProgress();
+
     const handleProgressUpdate = () => {
-      const moduleProgress = getModuleProgress(module);
-      const percentage = moduleProgress.total > 0
-        ? Math.round((moduleProgress.completed / moduleProgress.total) * 100)
-        : 0;
-      setProgress({ ...moduleProgress, percentage });
+      loadProgress();
     };
 
     window.addEventListener('progressUpdate', handleProgressUpdate);
     return () => window.removeEventListener('progressUpdate', handleProgressUpdate);
-  }, [module, getModuleProgress]);
+  }, [module]);
+
+  // Render progress only after mount to avoid hydration issues
+  const displayProgress = isMounted ? (progress?.percentage || 0) : 0;
+  const displayCompleted = isMounted ? (progress?.completed || 0) : 0;
+  const displayTotal = isMounted ? (progress?.total || LESSON_COUNTS[module]) : LESSON_COUNTS[module];
 
   return (
     <Link
@@ -94,32 +130,32 @@ export function ModuleCard({
               stroke="currentColor"
               strokeWidth="8"
               strokeDasharray={`${Math.PI * 90}`}
-              strokeDashoffset={`${Math.PI * 90 * (1 - (progress?.percentage || 0) / 100)}`}
+              strokeDashoffset={`${Math.PI * 90 * (1 - displayProgress / 100)}`}
               className={`transition-all duration-500 ${textColor}`}
             />
           </svg>
           <div className="text-center">
             <div className={`text-2xl font-bold ${textColor}`}>
-              {progress?.percentage || 0}%
+              {displayProgress}%
             </div>
           </div>
         </div>
 
         <div className="flex-1">
           <p className="text-sm text-gray-600">
-            <span className="font-semibold">{progress?.completed || 0}</span> de{' '}
-            <span className="font-semibold">{progress?.total || 0}</span> aulas
+            <span className="font-semibold">{displayCompleted}</span> de{' '}
+            <span className="font-semibold">{displayTotal}</span> aulas
           </p>
           <p className="text-xs text-gray-500 mt-1">
-            {progress && progress.total > 0
-              ? `${progress.total - progress.completed} restantes`
+            {displayTotal > 0
+              ? `${displayTotal - displayCompleted} restantes`
               : 'Comece agora!'}
           </p>
         </div>
       </div>
 
       <span className={`${textColor} font-semibold group-hover:translate-x-1 inline-block transition-transform`}>
-        {progress?.percentage === 100 ? 'Revisitar Módulo' : 'Continuar Aprendendo'} →
+        {displayProgress === 100 ? 'Revisitar Módulo' : 'Continuar Aprendendo'} →
       </span>
     </Link>
   );
