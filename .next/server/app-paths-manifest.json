@@ -1,9 +1,9 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/bootcamp/page": "app/bootcamp/page.js",
-  "/page": "app/page.js",
-  "/mastery/page": "app/mastery/page.js",
   "/projects/page": "app/projects/page.js",
-  "/mastery/[lesson]/page": "app/mastery/[lesson]/page.js",
-  "/bootcamp/[lesson]/page": "app/bootcamp/[lesson]/page.js"
+  "/basico-claude-code/page": "app/basico-claude-code/page.js",
+  "/page": "app/page.js",
+  "/bootcamp/page": "app/bootcamp/page.js",
+  "/bootcamp/[lesson]/page": "app/bootcamp/[lesson]/page.js",
+  "/basico-claude-code/[lesson]/page": "app/basico-claude-code/[lesson]/page.js"
 }

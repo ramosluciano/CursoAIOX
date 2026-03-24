@@ -1,69 +1,45 @@
 {
   "pages": {
-    "/_not-found/page": [
-      "static/chunks/webpack-c81f7fd28659d64f.js",
-      "static/chunks/fd9d1056-09a1050eaccfe25e.js",
-      "static/chunks/117-02819dfec7a25f15.js",
-      "static/chunks/main-app-20cb698a9ccd22ba.js",
-      "static/chunks/app/_not-found/page-68f9436d20fb99ed.js"
+    "/basico-claude-code/[lesson]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/basico-claude-code/[lesson]/page.js"
     ],
     "/layout": [
-      "static/chunks/webpack-c81f7fd28659d64f.js",
-      "static/chunks/fd9d1056-09a1050eaccfe25e.js",
-      "static/chunks/117-02819dfec7a25f15.js",
-      "static/chunks/main-app-20cb698a9ccd22ba.js",
-      "static/css/71d217bb04404cb9.css",
-      "static/chunks/972-435ad046c10f8479.js",
-      "static/chunks/app/layout-54d86b5a841a3f04.js"
-    ],
-    "/bootcamp/page": [
-      "static/chunks/webpack-c81f7fd28659d64f.js",
-      "static/chunks/fd9d1056-09a1050eaccfe25e.js",
-      "static/chunks/117-02819dfec7a25f15.js",
-      "static/chunks/main-app-20cb698a9ccd22ba.js",
-      "static/chunks/972-435ad046c10f8479.js",
-      "static/chunks/app/bootcamp/page-52568dfeea8e830e.js"
-    ],
-    "/page": [
-      "static/chunks/webpack-c81f7fd28659d64f.js",
-      "static/chunks/fd9d1056-09a1050eaccfe25e.js",
-      "static/chunks/117-02819dfec7a25f15.js",
-      "static/chunks/main-app-20cb698a9ccd22ba.js",
-      "static/chunks/972-435ad046c10f8479.js",
-      "static/chunks/app/page-86d33fe5a40fee63.js"
-    ],
-    "/mastery/page": [
-      "static/chunks/webpack-c81f7fd28659d64f.js",
-      "static/chunks/fd9d1056-09a1050eaccfe25e.js",
-      "static/chunks/117-02819dfec7a25f15.js",
-      "static/chunks/main-app-20cb698a9ccd22ba.js",
-      "static/chunks/972-435ad046c10f8479.js",
-      "static/chunks/app/mastery/page-233f308feeed9b30.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ],
     "/projects/page": [
-      "static/chunks/webpack-c81f7fd28659d64f.js",
-      "static/chunks/fd9d1056-09a1050eaccfe25e.js",
-      "static/chunks/117-02819dfec7a25f15.js",
-      "static/chunks/main-app-20cb698a9ccd22ba.js",
-      "static/chunks/app/projects/page-8d00a783a2db8ae1.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/projects/page.js"
     ],
-    "/mastery/[lesson]/page": [
-      "static/chunks/webpack-c81f7fd28659d64f.js",
-      "static/chunks/fd9d1056-09a1050eaccfe25e.js",
-      "static/chunks/117-02819dfec7a25f15.js",
-      "static/chunks/main-app-20cb698a9ccd22ba.js",
-      "static/chunks/972-435ad046c10f8479.js",
-      "static/chunks/552-ca913c8f5aa11d94.js",
-      "static/chunks/app/mastery/[lesson]/page-19f8ee117e5859d3.js"
+    "/basico-claude-code/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/basico-claude-code/page.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
+    "/bootcamp/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/bootcamp/page.js"
     ],
     "/bootcamp/[lesson]/page": [
-      "static/chunks/webpack-c81f7fd28659d64f.js",
-      "static/chunks/fd9d1056-09a1050eaccfe25e.js",
-      "static/chunks/117-02819dfec7a25f15.js",
-      "static/chunks/main-app-20cb698a9ccd22ba.js",
-      "static/chunks/972-435ad046c10f8479.js",
-      "static/chunks/552-ca913c8f5aa11d94.js",
-      "static/chunks/app/bootcamp/[lesson]/page-3b4cd11983f1559e.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/bootcamp/[lesson]/page.js"
+    ],
+    "/_not-found/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

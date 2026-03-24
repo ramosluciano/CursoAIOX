@@ -34,18 +34,26 @@ export function LessonRenderer({
       gfm: true,
     });
 
-    // Process markdown (checkboxes are already converted in the .md files)
-    Promise.resolve(marked(content)).then((html) => {
-      let processedHtml = html as string;
+    // Process markdown asynchronously
+    const processMarkdown = async () => {
+      try {
+        const html = await marked(content);
+        let processedHtml = html as string;
 
-      // Remove any disabled attributes that might be present
-      processedHtml = processedHtml.replace(
-        /\s+disabled(?=[\s/>])/g,
-        ''
-      );
+        // Remove any disabled attributes that might be present
+        processedHtml = processedHtml.replace(
+          /\s+disabled(?=[\s/>])/g,
+          ''
+        );
 
-      setHtmlContent(processedHtml);
-    });
+        setHtmlContent(processedHtml);
+      } catch (error) {
+        console.error('Error processing markdown:', error);
+        setHtmlContent(`<p>Erro ao carregar conteúdo</p>`);
+      }
+    };
+
+    processMarkdown();
 
     // Check if lesson is completed
     const progress = localStorage.getItem('courseProgress');

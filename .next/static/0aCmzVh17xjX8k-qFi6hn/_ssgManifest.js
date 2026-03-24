@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fbootcamp\u002F[lesson]","\u002Fmastery\u002F[lesson]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()
