@@ -22,7 +22,7 @@ services:
     image: dpage/pgadmin4:latest
     container_name: cursoaiox-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: dev@cursoaiox.local
+      PGADMIN_DEFAULT_EMAIL: dev@cursoaiox.com
       PGADMIN_DEFAULT_PASSWORD: dev_password
     ports:
       - "5050:80"
