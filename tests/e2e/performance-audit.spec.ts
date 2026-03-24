@@ -124,11 +124,10 @@ test.describe('Performance & Accessibility Audit', () => {
       // Check for semantic elements
       const buttons = page.locator('button');
       const links = page.locator('a');
-      const nav = page.locator('nav');
 
       await expect(buttons).toBeDefined();
       await expect(links).toBeDefined();
-      // Navigation might not always be present, but should use semantic HTML
+      // Should use semantic HTML elements
     });
 
     test('should have proper label associations', async ({ page }) => {
@@ -168,7 +167,6 @@ test.describe('Performance & Accessibility Audit', () => {
       await page.goto('/bootcamp/aula-01-setup-anatomia');
 
       // Check main content text
-      const content = page.locator('article');
       const text = page.locator('p, h1, h2, h3, h4, h5, h6, span');
 
       const elements = await text.all();

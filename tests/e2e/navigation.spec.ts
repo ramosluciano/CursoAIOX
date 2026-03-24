@@ -176,10 +176,6 @@ test.describe('Multi-Module Navigation & Progress', () => {
   test('header progress indicator updates on lesson completion', async ({ page }) => {
     await page.goto('/bootcamp/aula-01-setup-anatomia');
 
-    // Get initial progress percentage
-    const progressText = page.locator('text=/\\d+%/').first();
-    const initialProgress = await progressText.textContent();
-
     // Mark lesson complete
     await page.locator('button:has-text("Marcar como Concluída")').first().click();
 
