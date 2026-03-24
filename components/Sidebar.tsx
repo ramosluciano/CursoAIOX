@@ -7,12 +7,14 @@ import React, { useState, useEffect } from 'react';
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [expandedModule, setExpandedModule] = useState<'bootcamp' | 'mastery' | null>(
-    pathname.startsWith('/bootcamp')
-      ? 'bootcamp'
-      : pathname.startsWith('/mastery')
-        ? 'mastery'
-        : null
+  const [expandedModule, setExpandedModule] = useState<'basico-claude-code' | 'bootcamp' | 'mastery' | null>(
+    pathname.startsWith('/basico-claude-code')
+      ? 'basico-claude-code'
+      : pathname.startsWith('/bootcamp')
+        ? 'bootcamp'
+        : pathname.startsWith('/mastery')
+          ? 'mastery'
+          : null
   );
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
 
@@ -20,8 +22,9 @@ export function Sidebar() {
     const loadCompleted = () => {
       const progress = localStorage.getItem('courseProgress');
       if (progress) {
-        const { completedLessons: completed } = JSON.parse(progress);
-        setCompletedLessons(new Set(completed));
+        const progressData = JSON.parse(progress);
+        const allCompleted = new Set<string>(progressData.completedLessons || []);
+        setCompletedLessons(allCompleted);
       }
     };
 
@@ -41,8 +44,55 @@ export function Sidebar() {
     <aside className="w-64 bg-aiox-50 dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 overflow-y-auto hidden md:flex flex-col transition-colors">
       {/* Navigation Modules */}
       <nav className="flex-1 p-6 space-y-4">
-        {/* Bootcamp Module */}
+        {/* Básico Claude Code Module */}
         <div>
+          <button
+            onClick={() =>
+              setExpandedModule(
+                expandedModule === 'basico-claude-code' ? null : 'basico-claude-code'
+              )
+            }
+            className="w-full flex items-center justify-between px-4 py-2 font-bold text-lg rounded-lg hover:bg-white dark:hover:bg-slate-700 transition-colors text-green-700 dark:text-green-400 group"
+          >
+            🌱 Básico
+            <ChevronDown
+              className={`w-5 h-5 transition-transform ${
+                expandedModule === 'basico-claude-code' ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+
+          {expandedModule === 'basico-claude-code' && (
+            <div className="mt-2 space-y-1 ml-4">
+              {BASICO_LESSONS.map((lesson) => {
+                const isCompleted = completedLessons.has(`basico-claude-code/${lesson.slug}`);
+                const isCurrent = pathname === `/basico-claude-code/${lesson.slug}`;
+
+                return (
+                  <Link
+                    key={lesson.slug}
+                    href={`/basico-claude-code/${lesson.slug}`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded text-sm transition-colors ${
+                      isCurrent
+                        ? 'bg-green-600 text-white font-semibold'
+                        : isCompleted
+                          ? 'bg-gray-200 dark:bg-slate-700 text-gray-500 dark:text-gray-400 line-through'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-slate-700'
+                    }`}
+                  >
+                    {isCompleted && !isCurrent && (
+                      <CheckCircle className="w-4 h-4 flex-shrink-0 text-green-600" />
+                    )}
+                    <span className="flex-1">{lesson.title}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Bootcamp Module */}
+        <div className="pt-2 border-t border-gray-300 dark:border-slate-700">
           <button
             onClick={() =>
               setExpandedModule(
@@ -89,7 +139,7 @@ export function Sidebar() {
         </div>
 
         {/* Mastery Module */}
-        <div className="pt-4 border-t border-gray-300 dark:border-slate-700">
+        <div className="pt-2 border-t border-gray-300 dark:border-slate-700">
           <button
             onClick={() =>
               setExpandedModule(
@@ -150,6 +200,17 @@ export function Sidebar() {
 }
 
 // Lesson data - generated from file system
+const BASICO_LESSONS = [
+  { slug: 'aula-01-o-que-e-claude-code', title: '01. O que é Claude Code' },
+  { slug: 'aula-02-setup-primeira-sessao', title: '02. Setup' },
+  { slug: 'aula-03-anatomia-claude-md', title: '03. CLAUDE.md' },
+  { slug: 'aula-04-sistema-permissoes', title: '04. Permissões' },
+  { slug: 'aula-05-memoria-persistente', title: '05. Memória' },
+  { slug: 'aula-06-rules-system-contexto', title: '06. Rules System' },
+  { slug: 'aula-07-agentes-tasks-orquestracao', title: '07. Orquestração' },
+  { slug: 'aula-08-mcp-integracao-advanced', title: '08. MCP' },
+];
+
 const BOOTCAMP_LESSONS = [
   { slug: 'aula-01-setup-anatomia', title: '01. Setup & Anatomia' },
   { slug: 'aula-02-conceitos-fluxo', title: '02. Conceitos & Fluxo' },

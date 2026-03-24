@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { BookOpen, Code2, Zap } from 'lucide-react';
+import { ModuleCard } from '@/components/module/ModuleCard';
 
 export default function Home() {
   return (
@@ -10,55 +11,48 @@ export default function Home() {
           Plataforma de Curso AIOX
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Domine o Sistema Orquestrado por IA para Desenvolvimento Full Stack através de nossos programas de bootcamp e mastery abrangentes.
+          Domine o Sistema Orquestrado por IA para Desenvolvimento Full Stack através de nossos programas progressivos de aprendizado.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+          {/* Básico Claude Code Card */}
+          <ModuleCard
+            module="basico"
+            title="Básico Claude Code"
+            description="Introdução ao Claude Code"
+            lessonCount={8}
+            icon={<BookOpen className="w-8 h-8" />}
+            href="/basico-claude-code"
+            gradient="from-green-50 to-emerald-50"
+            textColor="text-green-700"
+            badgeColor="border-green-500"
+          />
+
           {/* Bootcamp Card */}
-          <Link
+          <ModuleCard
+            module="bootcamp"
+            title="Bootcamp"
+            description="Programa de Fundação Profissional"
+            lessonCount={18}
+            icon={<Code2 className="w-8 h-8" />}
             href="/bootcamp"
-            className="group p-8 bg-gradient-to-br from-aiox-50 to-blue-50 rounded-lg border-2 border-aiox-purple hover:border-aiox-purple/80 transition-all hover:shadow-lg"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <BookOpen className="w-8 h-8 text-aiox-purple" />
-              <h2 className="text-2xl font-bold text-aiox-700">Bootcamp</h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              Programa de Fundação Profissional
-            </p>
-            <ul className="text-sm text-gray-600 space-y-2 mb-4 text-left">
-              <li>✓ 18 aulas abrangentes</li>
-              <li>✓ 3 projetos do mundo real</li>
-              <li>✓ Pipeline de desenvolvimento completo</li>
-              <li>✓ Conhecimento fundamental</li>
-            </ul>
-            <span className="text-aiox-purple font-semibold group-hover:translate-x-1 inline-block transition-transform">
-              Começar a Aprender →
-            </span>
-          </Link>
+            gradient="from-aiox-50 to-blue-50"
+            textColor="text-aiox-700"
+            badgeColor="border-aiox-purple"
+          />
 
           {/* Mastery Card */}
-          <Link
+          <ModuleCard
+            module="mastery"
+            title="Mastery"
+            description="Programa de Especialização Avançada"
+            lessonCount={22}
+            icon={<Zap className="w-8 h-8" />}
             href="/mastery"
-            className="group p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg border-2 border-aiox-accent hover:border-aiox-accent/80 transition-all hover:shadow-lg"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <Code2 className="w-8 h-8 text-aiox-accent" />
-              <h2 className="text-2xl font-bold text-aiox-600">Mastery</h2>
-            </div>
-            <p className="text-gray-600 mb-4">
-              Programa de Especialização Avançada
-            </p>
-            <ul className="text-sm text-gray-600 space-y-2 mb-4 text-left">
-              <li>✓ 22 aulas avançadas</li>
-              <li>✓ 3 projetos sofisticados</li>
-              <li>✓ Arquitetura SaaS</li>
-              <li>✓ Expertise em produção</li>
-            </ul>
-            <span className="text-aiox-accent font-semibold group-hover:translate-x-1 inline-block transition-transform">
-              Aprofundar Conhecimento →
-            </span>
-          </Link>
+            gradient="from-purple-50 to-pink-50"
+            textColor="text-aiox-accent"
+            badgeColor="border-aiox-accent"
+          />
         </div>
       </section>
 

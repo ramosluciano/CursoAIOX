@@ -8,7 +8,7 @@ import Link from 'next/link';
 interface LessonRendererProps {
   content: string;
   lessonSlug: string;
-  module: 'bootcamp' | 'mastery';
+  module: 'basico-claude-code' | 'bootcamp' | 'mastery';
   lessonIndex: number;
   totalLessons: number;
   nextLesson?: string;
@@ -50,29 +50,43 @@ export function LessonRenderer({
     // Check if lesson is completed
     const progress = localStorage.getItem('courseProgress');
     if (progress) {
-      const { completedLessons } = JSON.parse(progress);
-      setIsCompleted(completedLessons.includes(`${module}/${lessonSlug}`));
+      const progressData = JSON.parse(progress);
+      const module_key = module === 'basico-claude-code' ? 'basico' : module;
+      const lessonId = `${module_key}/${lessonSlug}`;
+      setIsCompleted(progressData.completedLessons?.includes(lessonId) || false);
     }
   }, [content, lessonSlug, module]);
 
   const handleCompleteLesson = () => {
     const progress = localStorage.getItem('courseProgress');
+    const module_key = module === 'basico-claude-code' ? 'basico' : module;
+    const lessonId = `${module_key}/${lessonSlug}`;
+
     let progressData = progress
       ? JSON.parse(progress)
-      : { completedLessons: [], totalLessons: 40 };
+      : {
+          completedLessons: [],
+          totalLessons: 50,
+          moduleProgress: {
+            basico: { completed: 0, total: 8 },
+            bootcamp: { completed: 0, total: 18 },
+            mastery: { completed: 0, total: 22 },
+          },
+          version: 2,
+        };
 
-    const lessonId = `${module}/${lessonSlug}`;
+    const index = progressData.completedLessons.indexOf(lessonId);
 
-    if (!progressData.completedLessons.includes(lessonId)) {
+    if (index > -1) {
+      // Unmark as completed
+      progressData.completedLessons.splice(index, 1);
+      progressData.moduleProgress[module_key].completed--;
+      setIsCompleted(false);
+    } else {
       // Mark as completed
       progressData.completedLessons.push(lessonId);
+      progressData.moduleProgress[module_key].completed++;
       setIsCompleted(true);
-    } else {
-      // Unmark as completed
-      progressData.completedLessons = progressData.completedLessons.filter(
-        (id: string) => id !== lessonId
-      );
-      setIsCompleted(false);
     }
 
     localStorage.setItem('courseProgress', JSON.stringify(progressData));
@@ -90,9 +104,11 @@ export function LessonRenderer({
           <p>
             Módulo:{' '}
             <span className="font-semibold">
-              {module === 'bootcamp'
-                ? 'Professional Bootcamp'
-                : 'Mastery'}
+              {module === 'basico-claude-code'
+                ? 'Básico Claude Code'
+                : module === 'bootcamp'
+                  ? 'Professional Bootcamp'
+                  : 'Mastery'}
             </span>
           </p>
           <p>
