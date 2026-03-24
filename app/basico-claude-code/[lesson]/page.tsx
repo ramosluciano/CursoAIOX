@@ -58,8 +58,8 @@ export default async function LessonPage({ params }: PageProps) {
     ''
   );
 
-  // Remove the first h1 title from content to avoid duplication (title is shown in header)
-  htmlContent = htmlContent.replace(/^<h1[^>]*>.*?<\/h1>\s*/i, '');
+  // Remove h1 titles from content to avoid duplication (title is shown in header)
+  htmlContent = htmlContent.replace(/<h1[^>]*>.*?<\/h1>\s*/gi, '');
 
   const title = extractTitle(content);
   const lessonIndex = BASICO_LESSONS.indexOf(params.lesson);
