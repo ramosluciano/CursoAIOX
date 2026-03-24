@@ -1,50 +1,55 @@
-# Multi-stage build para otimizar tamanho da imagem
-FROM node:20-alpine AS builder
+# Build stage
+FROM node:18-alpine AS builder
 
 WORKDIR /app
+
+# Install dependencies required for Prisma in Alpine
+RUN apk add --no-cache libc6-compat openssl
 
 # Copy package files
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+RUN npm ci
 
-# Copy source code and course content
+# Copy source code
 COPY . .
 
-# Build Next.js application
+# Set build-time DATABASE_URL (dummy, used only for build)
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Build application
 RUN npm run build
 
 # Runtime stage
-FROM node:20-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
-# Set environment to production
-ENV NODE_ENV=production
+# Install dependencies required for Prisma in Alpine
+RUN apk add --no-cache libc6-compat openssl
 
-# Install only production dependencies
+# Install dependencies (production only)
 COPY package*.json ./
-RUN npm ci --omit=dev --legacy-peer-deps || npm install --omit=dev --legacy-peer-deps
+RUN npm ci --only=production
 
-# Copy built application from builder stage
+# Copy built application from builder
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/tsconfig.json ./
-COPY --from=builder /app/package.json ./
-
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
-USER nextjs
+COPY --from=builder /app/app ./app
+COPY --from=builder /app/components ./components
+COPY --from=builder /app/lib ./lib
+COPY --from=builder /app/Básico-Claude-Code ./Básico-Claude-Code
+COPY --from=builder /app/Bootcamp ./Bootcamp
+COPY --from=builder /app/Mastery ./Mastery
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 # Expose port
 EXPOSE 3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
 # Start application
 CMD ["npm", "start"]
