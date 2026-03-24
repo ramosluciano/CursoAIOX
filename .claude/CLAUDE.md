@@ -93,6 +93,80 @@ When an agent is active:
 - Add tests for new features
 - Test edge cases and error scenarios
 
+## 🐳 Docker-First Development — OBRIGATORIO NESTE PROJETO
+
+**REGRA INVIOLAVEL PARA CURSOAIOX:** Todo desenvolvimento acontece APENAS em Docker no localhost. ZERO instalação local.
+
+### Arquitetura Docker do Projeto
+
+```yaml
+docker-compose.yml:
+  postgres:        # PostgreSQL 16 Alpine com health check
+    port: 5432
+    healthcheck: pg_isready
+
+  pgadmin:         # Interface administrativa (opcional)
+    port: 5050
+
+  web:             # Next.js app em produção
+    port: 3000
+    depends_on: postgres (healthy)
+    env: DATABASE_URL=postgresql://user:pass@postgres:5432/db
+```
+
+### Fluxo Obrigatório
+
+1. **Desenvolvimento Local (Docker):**
+   ```bash
+   docker compose up -d          # Inicia todos os serviços
+   curl http://localhost:3000    # Testa web
+   curl http://localhost:5432    # Testa banco
+   docker compose logs -f web    # Debug de erros
+   ```
+
+2. **Testar Funcionamento:**
+   - ✓ Aplicação rodando em localhost:3000
+   - ✓ PostgreSQL conectando em localhost:5432
+   - ✓ Migrations/seeds aplicadas automaticamente
+   - ✓ API endpoints respondendo
+   - ✓ Zero erros nos logs
+
+3. **Commits & CI/CD:**
+   - Mesmo Dockerfile e compose.yml usados em produção
+   - Apenas variáveis de ambiente mudam (DB_HOST, API_URL, etc)
+   - Imagem Docker é artifact confiável entre ambientes
+
+### ❌ Nunca Fazer (Lessons Learned)
+
+| Erro | Consequência | Solução |
+|------|-------------|---------|
+| `npm install` local | Port conflicts, node_modules corrompido | Tudo em Docker |
+| `npm run dev` local | "Address already in use :3000" | Docker compose up |
+| Instalar PostgreSQL local | Conflitos de porta, dados perdidos | Use container `postgres:16-alpine` |
+| `.env` no git | Credentials expostas | Environment vars em docker-compose.yml |
+| "Funciona localmente" | Falha em produção | "Funciona no container Docker" é a métrica |
+
+### Verificação Pré-Commit
+
+```bash
+# ✓ ANTES de fazer commit:
+docker compose down              # Clean shutdown
+docker compose up -d             # Fresh start
+sleep 10                         # Aguardar inicialização
+curl http://localhost:3000       # Teste básico
+docker compose logs web          # Verificar erros
+git add -A && git commit -m "..."
+```
+
+### Troubleshooting
+
+| Problema | Diagnóstico | Fix |
+|----------|-----------|-----|
+| Port 3000 em uso | `lsof -i :3000` | `pkill -9 next-server && docker compose up` |
+| "Can't reach postgres" | Check docker network | `docker network inspect cursoaiox_cursoaiox-network` |
+| Migrations não aplicadas | Verificar logs | `docker compose exec web npx prisma migrate status` |
+| .env não carregado | Environment no compose.yml? | Mover vars para `environment:` no yml |
+
 <!-- AIOX-MANAGED-START: framework-structure -->
 ## AIOX Framework Structure
 
