@@ -29,6 +29,7 @@ export function Header() {
     setMounted(true);
   }, []);
 
+  const isBasico = pathname.startsWith('/basico-claude-code');
   const isBootcamp = pathname.startsWith('/bootcamp');
   const isMastery = pathname.startsWith('/mastery');
   const isProjects = pathname.startsWith('/projects');
@@ -42,6 +43,16 @@ export function Header() {
         </Link>
 
         <nav className="flex items-center gap-8">
+          <Link
+            href="/basico-claude-code"
+            className={`font-medium transition-colors ${
+              isBasico
+                ? 'text-green-700 dark:text-green-400 border-b-2 border-green-700 dark:border-green-400'
+                : 'text-gray-600 hover:text-green-700 dark:hover:text-green-400'
+            }`}
+          >
+            Básico
+          </Link>
           <Link
             href="/bootcamp"
             className={`font-medium transition-colors ${
