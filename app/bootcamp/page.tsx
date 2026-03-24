@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { CheckCircle } from 'lucide-react';
+import { useLessonCompletion } from '@/hooks/useLessonCompletion';
 
 const LESSONS = [
   { slug: 'aula-01-setup-anatomia', title: '01. Setup & Anatomia', description: 'Fundação do AIOX' },
@@ -26,32 +26,7 @@ const LESSONS = [
 ];
 
 export default function BootcampPage() {
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-
-    const loadCompleted = () => {
-      const progress = localStorage.getItem('courseProgress');
-      if (progress) {
-        const progressData = JSON.parse(progress);
-        const completed = new Set<string>(progressData.completedLessons || []);
-        setCompletedLessons(completed);
-      }
-    };
-
-    loadCompleted();
-
-    const handleProgressUpdate = () => {
-      loadCompleted();
-    };
-
-    window.addEventListener('progressUpdate', handleProgressUpdate);
-    return () => {
-      window.removeEventListener('progressUpdate', handleProgressUpdate);
-    };
-  }, []);
+  const { completedLessons, isMounted } = useLessonCompletion();
 
   return (
     <div className="space-y-8">

@@ -15,13 +15,8 @@ export function LessonCompletionButton({
   const [isCompleted, setIsCompleted] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Map module names to storage keys
-  const getStorageKey = (mod: string) => {
-    if (mod === 'basico-claude-code') return 'basico';
-    return mod;
-  };
-
-  const moduleKey = getStorageKey(module);
+  // Use module name directly as storage key
+  const moduleKey = module;
   const fullLessonId = `${moduleKey}/${lessonId}`;
 
   // Initialize from localStorage
@@ -46,9 +41,9 @@ export function LessonCompletionButton({
         ? JSON.parse(progress)
         : {
             completedLessons: [],
-            totalLessons: 50,
+            totalLessons: 48,
             moduleProgress: {
-              basico: { completed: 0, total: 8 },
+              'basico-claude-code': { completed: 0, total: 8 },
               bootcamp: { completed: 0, total: 18 },
               mastery: { completed: 0, total: 22 },
             },

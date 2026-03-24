@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { CheckCircle } from 'lucide-react';
+import { useLessonCompletion } from '@/hooks/useLessonCompletion';
 
 const LESSONS = [
   { slug: 'mastery-aula-01-internals', title: '01. Internals', description: 'AIOX internals' },
@@ -30,32 +30,7 @@ const LESSONS = [
 ];
 
 export default function MasteryPage() {
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-
-    const loadCompleted = () => {
-      const progress = localStorage.getItem('courseProgress');
-      if (progress) {
-        const progressData = JSON.parse(progress);
-        const completed = new Set<string>(progressData.completedLessons || []);
-        setCompletedLessons(completed);
-      }
-    };
-
-    loadCompleted();
-
-    const handleProgressUpdate = () => {
-      loadCompleted();
-    };
-
-    window.addEventListener('progressUpdate', handleProgressUpdate);
-    return () => {
-      window.removeEventListener('progressUpdate', handleProgressUpdate);
-    };
-  }, []);
+  const { completedLessons, isMounted } = useLessonCompletion();
 
   return (
     <div className="space-y-8">

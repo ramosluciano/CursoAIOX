@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { CheckCircle } from 'lucide-react';
+import { useLessonCompletion } from '@/hooks/useLessonCompletion';
 
 const LESSONS = [
   { slug: 'aula-01-o-que-e-claude-code', title: '01. O que é Claude Code?', description: 'Introdução ao Claude Code' },
@@ -16,32 +16,7 @@ const LESSONS = [
 ];
 
 export default function BasicoClaudeCodePage() {
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-
-    const loadCompleted = () => {
-      const progress = localStorage.getItem('courseProgress');
-      if (progress) {
-        const progressData = JSON.parse(progress);
-        const completed = new Set<string>(progressData.completedLessons || []);
-        setCompletedLessons(completed);
-      }
-    };
-
-    loadCompleted();
-
-    const handleProgressUpdate = () => {
-      loadCompleted();
-    };
-
-    window.addEventListener('progressUpdate', handleProgressUpdate);
-    return () => {
-      window.removeEventListener('progressUpdate', handleProgressUpdate);
-    };
-  }, []);
+  const { completedLessons, isMounted } = useLessonCompletion();
 
   return (
     <div className="space-y-8">
