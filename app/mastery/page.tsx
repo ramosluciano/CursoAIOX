@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, GraduationCap } from 'lucide-react';
 import { useLessonCompletion } from '@/hooks/useLessonCompletion';
 
 const LESSONS = [
@@ -35,7 +35,10 @@ export default function MasteryPage() {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-aiox-600 mb-4">Programa Mastery AIOX</h1>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <GraduationCap className="w-10 h-10 text-stone-700" />
+          <h1 className="text-4xl font-bold text-stone-700">Programa Mastery AIOX</h1>
+        </div>
         <p className="text-lg text-gray-600">22 aulas avançadas para desenvolvimento AIOX em nível de especialista</p>
       </div>
 
@@ -49,15 +52,15 @@ export default function MasteryPage() {
               href={`/mastery/${lesson.slug}`}
               className={`group p-6 rounded-lg border transition-all duration-300 ${
                 isCompleted
-                  ? 'bg-purple-50 border-aiox-accent/50 hover:border-aiox-accent'
-                  : 'bg-white border-gray-200 hover:border-aiox-accent'
+                  ? 'bg-stone-300 border-stone-400 hover:border-stone-500'
+                  : 'bg-white border-gray-200 hover:border-stone-600'
               } hover:shadow-lg`}
             >
               <div className="flex items-start gap-4">
                 <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold transition-colors ${
                   isCompleted
-                    ? 'bg-purple-200 text-aiox-accent'
-                    : 'bg-cyan-100 text-aiox-accent group-hover:bg-aiox-accent group-hover:text-white'
+                    ? 'bg-stone-400 text-white'
+                    : 'bg-stone-200 text-stone-700 group-hover:bg-stone-700 group-hover:text-white'
                 }`}>
                   {String(index + 1).padStart(2, '0')}
                 </div>
@@ -66,24 +69,24 @@ export default function MasteryPage() {
                     <div className="flex-1">
                       <h3 className={`font-bold text-lg transition-colors ${
                         isCompleted
-                          ? 'text-aiox-accent line-through'
-                          : 'text-gray-900 group-hover:text-aiox-accent'
+                          ? 'text-stone-700 line-through'
+                          : 'text-gray-900 group-hover:text-stone-700'
                       }`}>
                         {lesson.title}
                       </h3>
                       <p className={`text-sm mt-1 ${
-                        isCompleted ? 'text-aiox-accent/70' : 'text-gray-600'
+                        isCompleted ? 'text-stone-700/70' : 'text-gray-600'
                       }`}>
                         {lesson.description}
                       </p>
                     </div>
                     {isCompleted && (
-                      <CheckCircle className="w-5 h-5 text-aiox-accent flex-shrink-0 mt-1" />
+                      <CheckCircle className="w-5 h-5 text-stone-700 flex-shrink-0 mt-1" />
                     )}
                   </div>
                 </div>
                 <span className={`font-semibold opacity-0 group-hover:opacity-100 transition-opacity ${
-                  isCompleted ? 'text-aiox-accent' : 'text-aiox-accent'
+                  isCompleted ? 'text-stone-700' : 'text-stone-700'
                 }`}>
                   →
                 </span>

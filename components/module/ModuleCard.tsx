@@ -9,7 +9,7 @@ interface ModuleProgress {
 }
 
 interface ModuleCardProps {
-  module: 'basico' | 'bootcamp' | 'mastery';
+  module: 'basico' | 'basico-claude-code' | 'bootcamp' | 'mastery';
   title: string;
   description: string;
   lessonCount: number;
@@ -22,8 +22,17 @@ interface ModuleCardProps {
 
 const LESSON_COUNTS = {
   basico: 8,
+  'basico-claude-code': 8,
   bootcamp: 18,
   mastery: 22,
+};
+
+// Map old keys to new keys for backward compatibility
+const MODULE_KEY_MAP: Record<string, string[]> = {
+  'basico-claude-code': ['basico-claude-code', 'basico'], // Try new key first, then old
+  'basico': ['basico-claude-code', 'basico'],
+  'bootcamp': ['bootcamp'],
+  'mastery': ['mastery'],
 };
 
 export function ModuleCard({
@@ -49,10 +58,26 @@ export function ModuleCard({
         const stored = localStorage.getItem('courseProgress');
         if (stored) {
           const data = JSON.parse(stored);
-          const moduleProgress = data.moduleProgress?.[module] || {
-            completed: 0,
-            total: LESSON_COUNTS[module],
-          };
+
+          // Try to find progress using module key mapping (for backward compatibility)
+          let moduleProgress = null;
+          const keysToTry = MODULE_KEY_MAP[module] || [module];
+
+          for (const key of keysToTry) {
+            if (data.moduleProgress?.[key]) {
+              moduleProgress = data.moduleProgress[key];
+              break;
+            }
+          }
+
+          // If still not found, use default
+          if (!moduleProgress) {
+            moduleProgress = {
+              completed: 0,
+              total: LESSON_COUNTS[module] || 8,
+            };
+          }
+
           const percentage = moduleProgress.total > 0
             ? Math.round((moduleProgress.completed / moduleProgress.total) * 100)
             : 0;
@@ -60,7 +85,7 @@ export function ModuleCard({
         } else {
           setProgress({
             completed: 0,
-            total: LESSON_COUNTS[module],
+            total: LESSON_COUNTS[module] || 8,
             percentage: 0,
           });
         }
@@ -68,7 +93,7 @@ export function ModuleCard({
         console.error('Error loading progress:', error);
         setProgress({
           completed: 0,
-          total: LESSON_COUNTS[module],
+          total: LESSON_COUNTS[module] || 8,
           percentage: 0,
         });
       }

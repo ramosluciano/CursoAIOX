@@ -57,8 +57,8 @@ export function Header() {
             href="/bootcamp"
             className={`font-medium transition-colors ${
               isBootcamp
-                ? 'text-aiox-purple border-b-2 border-aiox-purple'
-                : 'text-gray-600 hover:text-aiox-purple'
+                ? 'text-blue-700 border-b-2 border-blue-700'
+                : 'text-gray-600 hover:text-blue-700'
             }`}
           >
             Bootcamp
@@ -67,8 +67,8 @@ export function Header() {
             href="/mastery"
             className={`font-medium transition-colors ${
               isMastery
-                ? 'text-aiox-accent border-b-2 border-aiox-accent'
-                : 'text-gray-600 hover:text-aiox-accent'
+                ? 'text-stone-700 border-b-2 border-stone-700'
+                : 'text-gray-600 hover:text-stone-700'
             }`}
           >
             Mastery
@@ -81,7 +81,7 @@ export function Header() {
                 : 'text-gray-600 hover:text-aiox-purple'
             }`}
           >
-            Projects
+            Projetos
           </Link>
         </nav>
 
@@ -109,7 +109,66 @@ export function Header() {
 function ProgressIndicator() {
   const [progress, setProgress] = useState(0);
 
+  // Migrate old data format to new format
+  const migrateOldData = () => {
+    const savedProgress = localStorage.getItem('courseProgress');
+    if (!savedProgress) return;
+
+    try {
+      const data = JSON.parse(savedProgress);
+      let needsMigration = false;
+
+      // Check if there are old 'basico/' entries that need migration
+      const migratedLessons = (data.completedLessons || []).map((lesson: string) => {
+        if (lesson.startsWith('basico/') && !lesson.startsWith('basico-claude-code/')) {
+          needsMigration = true;
+          return lesson.replace('basico/', 'basico-claude-code/');
+        }
+        return lesson;
+      });
+
+      // If migration needed, update storage
+      if (needsMigration) {
+        console.log('[ProgressIndicator] Migrating old basico/ entries to basico-claude-code/');
+
+        // Recalculate moduleProgress
+        const moduleProgress = {
+          'basico-claude-code': { completed: 0, total: 8 },
+          'bootcamp': { completed: 0, total: 18 },
+          'mastery': { completed: 0, total: 22 },
+        };
+
+        migratedLessons.forEach((lesson: string) => {
+          const [module] = lesson.split('/');
+          if (moduleProgress[module as keyof typeof moduleProgress]) {
+            moduleProgress[module as keyof typeof moduleProgress].completed++;
+          }
+        });
+
+        const migratedData = {
+          ...data,
+          completedLessons: migratedLessons,
+          totalLessons: 48,
+          moduleProgress,
+          version: 2,
+        };
+
+        localStorage.setItem('courseProgress', JSON.stringify(migratedData));
+        window.dispatchEvent(new Event('progressUpdate'));
+        return migratedData;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('[ProgressIndicator] Error during migration:', error);
+      return null;
+    }
+  };
+
   const updateProgress = () => {
+    // Run migration first (it updates localStorage if needed)
+    migrateOldData();
+
     const savedProgress = localStorage.getItem('courseProgress');
     if (savedProgress) {
       const { completedLessons, totalLessons } = JSON.parse(savedProgress);
@@ -136,6 +195,9 @@ function ProgressIndicator() {
 
   return (
     <div className="flex items-center gap-2">
+      <span className="text-xs font-semibold text-gray-600 dark:text-gray-400 whitespace-nowrap">
+        Progresso total
+      </span>
       <div className="w-24 h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-aiox-purple to-aiox-accent transition-all duration-300"

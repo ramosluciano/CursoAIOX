@@ -59,41 +59,58 @@ export function LessonRenderer({
     const progress = localStorage.getItem('courseProgress');
     if (progress) {
       const progressData = JSON.parse(progress);
-      const module_key = module === 'basico-claude-code' ? 'basico' : module;
-      const lessonId = `${module_key}/${lessonSlug}`;
-      setIsCompleted(progressData.completedLessons?.includes(lessonId) || false);
+      // Try new key first, then fall back to old key for backward compatibility
+      const newLessonId = `${module}/${lessonSlug}`;
+      const oldLessonId = module === 'basico-claude-code' ? `basico/${lessonSlug}` : newLessonId;
+
+      const isComplete = progressData.completedLessons?.includes(newLessonId) ||
+                        progressData.completedLessons?.includes(oldLessonId) ||
+                        false;
+      setIsCompleted(isComplete);
     }
   }, [content, lessonSlug, module]);
 
   const handleCompleteLesson = () => {
     const progress = localStorage.getItem('courseProgress');
-    const module_key = module === 'basico-claude-code' ? 'basico' : module;
-    const lessonId = `${module_key}/${lessonSlug}`;
+    const lessonId = `${module}/${lessonSlug}`;
 
     let progressData = progress
       ? JSON.parse(progress)
       : {
           completedLessons: [],
-          totalLessons: 50,
+          totalLessons: 48,
           moduleProgress: {
-            basico: { completed: 0, total: 8 },
-            bootcamp: { completed: 0, total: 18 },
-            mastery: { completed: 0, total: 22 },
+            'basico-claude-code': { completed: 0, total: 8 },
+            'bootcamp': { completed: 0, total: 18 },
+            'mastery': { completed: 0, total: 22 },
           },
           version: 2,
         };
 
-    const index = progressData.completedLessons.indexOf(lessonId);
+    // Ensure module exists in moduleProgress
+    if (!progressData.moduleProgress[module]) {
+      progressData.moduleProgress[module] = {
+        completed: 0,
+        total: module === 'basico-claude-code' ? 8 : module === 'bootcamp' ? 18 : 22,
+      };
+    }
+
+    // Try to find lesson with new key first, then old key for backward compatibility
+    const oldLessonId = module === 'basico-claude-code' ? `basico/${lessonSlug}` : lessonId;
+    let index = progressData.completedLessons.indexOf(lessonId);
+    if (index === -1 && module === 'basico-claude-code') {
+      index = progressData.completedLessons.indexOf(oldLessonId);
+    }
 
     if (index > -1) {
       // Unmark as completed
       progressData.completedLessons.splice(index, 1);
-      progressData.moduleProgress[module_key].completed--;
+      progressData.moduleProgress[module].completed--;
       setIsCompleted(false);
     } else {
       // Mark as completed
       progressData.completedLessons.push(lessonId);
-      progressData.moduleProgress[module_key].completed++;
+      progressData.moduleProgress[module].completed++;
       setIsCompleted(true);
     }
 

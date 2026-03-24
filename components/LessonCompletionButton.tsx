@@ -21,22 +21,47 @@ export function LessonCompletionButton({
 
   // Initialize from localStorage
   useEffect(() => {
-    setIsMounted(true);
+    console.log(`[LessonCompletionButton] Mount: module=${module}, lessonId=${lessonId}, fullLessonId=${fullLessonId}`);
+
+    // Check if localStorage is available
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      console.log(`[LessonCompletionButton] localStorage not available, skipping initialization`);
+      setIsMounted(true);
+      return;
+    }
 
     try {
       const progress = localStorage.getItem('courseProgress');
+      console.log(`[LessonCompletionButton] localStorage.courseProgress:`, progress ? 'FOUND (length=' + progress.length + ')' : 'NOT_FOUND');
+
       if (progress) {
         const data = JSON.parse(progress);
-        setIsCompleted(data.completedLessons?.includes(fullLessonId) || false);
+        const isCompleted = data.completedLessons?.includes(fullLessonId) || false;
+        console.log(`[LessonCompletionButton] Completed lessons:`, data.completedLessons, 'Is current completed?', isCompleted);
+        setIsCompleted(isCompleted);
+      } else {
+        console.log(`[LessonCompletionButton] No progress found, initializing as incomplete`);
       }
     } catch (error) {
-      console.error('Error loading progress:', error);
+      console.error('[LessonCompletionButton] Error loading progress:', error);
     }
-  }, [fullLessonId]);
+
+    setIsMounted(true);
+  }, [fullLessonId, module, lessonId]);
 
   const handleToggleCompletion = () => {
+    console.log(`[LessonCompletionButton] Click handler called for: ${fullLessonId}`);
+
+    // Check if localStorage is available
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+      console.error(`[LessonCompletionButton] localStorage not available in click handler`);
+      return;
+    }
+
     try {
       const progress = localStorage.getItem('courseProgress');
+      console.log(`[LessonCompletionButton] Current storage before update:`, progress ? JSON.parse(progress) : 'EMPTY');
+
       let data = progress
         ? JSON.parse(progress)
         : {
@@ -50,24 +75,42 @@ export function LessonCompletionButton({
             version: 2,
           };
 
+      // Ensure moduleProgress entry exists for this module
+      if (!data.moduleProgress[moduleKey]) {
+        console.log(`[LessonCompletionButton] Initializing moduleProgress for ${moduleKey}`);
+        const totalsByModule = {
+          'basico-claude-code': 8,
+          'bootcamp': 18,
+          'mastery': 22,
+        };
+        data.moduleProgress[moduleKey] = {
+          completed: 0,
+          total: totalsByModule[moduleKey] || 8,
+        };
+      }
+
       const index = data.completedLessons.indexOf(fullLessonId);
 
       if (index > -1) {
         // Remove from completed
+        console.log(`[LessonCompletionButton] Removing from completed`);
         data.completedLessons.splice(index, 1);
         data.moduleProgress[moduleKey].completed--;
         setIsCompleted(false);
       } else {
         // Add to completed
+        console.log(`[LessonCompletionButton] Adding to completed`);
         data.completedLessons.push(fullLessonId);
         data.moduleProgress[moduleKey].completed++;
         setIsCompleted(true);
       }
 
+      console.log(`[LessonCompletionButton] Storage after update:`, data);
       localStorage.setItem('courseProgress', JSON.stringify(data));
+      console.log(`[LessonCompletionButton] Dispatching progressUpdate event`);
       window.dispatchEvent(new Event('progressUpdate'));
     } catch (error) {
-      console.error('Error updating progress:', error);
+      console.error('[LessonCompletionButton] Error updating progress:', error);
     }
   };
 

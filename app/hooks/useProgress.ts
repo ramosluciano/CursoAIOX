@@ -11,9 +11,9 @@ export interface ProgressData {
   completedLessons: string[];
   totalLessons: number;
   moduleProgress: {
-    basico: ModuleProgress;
-    bootcamp: ModuleProgress;
-    mastery: ModuleProgress;
+    'basico-claude-code': ModuleProgress;
+    'bootcamp': ModuleProgress;
+    'mastery': ModuleProgress;
   };
   version: 2;
 }
@@ -26,9 +26,9 @@ export interface GlobalProgress {
 
 const STORAGE_KEY = 'courseProgress';
 const LESSON_COUNTS = {
-  basico: 8,
-  bootcamp: 18,
-  mastery: 22,
+  'basico-claude-code': 8,
+  'bootcamp': 18,
+  'mastery': 22,
 };
 
 /**
@@ -67,37 +67,45 @@ export function useProgress() {
 
   const getDefaultProgress = (): ProgressData => ({
     completedLessons: [],
-    totalLessons: 50,
+    totalLessons: 48,
     moduleProgress: {
-      basico: { completed: 0, total: LESSON_COUNTS.basico },
-      bootcamp: { completed: 0, total: LESSON_COUNTS.bootcamp },
-      mastery: { completed: 0, total: LESSON_COUNTS.mastery },
+      'basico-claude-code': { completed: 0, total: LESSON_COUNTS['basico-claude-code'] },
+      'bootcamp': { completed: 0, total: LESSON_COUNTS['bootcamp'] },
+      'mastery': { completed: 0, total: LESSON_COUNTS['mastery'] },
     },
     version: 2,
   });
 
   const migrateV1ToV2 = (v1Data: any): ProgressData => {
-    const moduleProgress = {
-      basico: { completed: 0, total: LESSON_COUNTS.basico },
-      bootcamp: { completed: 0, total: LESSON_COUNTS.bootcamp },
-      mastery: { completed: 0, total: LESSON_COUNTS.mastery },
+    const moduleProgress: ProgressData['moduleProgress'] = {
+      'basico-claude-code': { completed: 0, total: LESSON_COUNTS['basico-claude-code'] },
+      'bootcamp': { completed: 0, total: LESSON_COUNTS['bootcamp'] },
+      'mastery': { completed: 0, total: LESSON_COUNTS['mastery'] },
     };
 
-    // Count completed lessons per module
+    // Migrate completed lessons and count per module
+    const migratedLessons: string[] = [];
     v1Data.completedLessons?.forEach((lessonId: string) => {
-      const [module] = lessonId.split('/');
-      if (module === 'basico' && moduleProgress.basico) {
-        moduleProgress.basico.completed++;
-      } else if (module === 'bootcamp' && moduleProgress.bootcamp) {
-        moduleProgress.bootcamp.completed++;
-      } else if (module === 'mastery' && moduleProgress.mastery) {
-        moduleProgress.mastery.completed++;
+      const [module, ...rest] = lessonId.split('/');
+      const lessonName = rest.join('/');
+
+      // Migrate old 'basico/' to new 'basico-claude-code/'
+      if (module === 'basico') {
+        const newLessonId = `basico-claude-code/${lessonName}`;
+        migratedLessons.push(newLessonId);
+        moduleProgress['basico-claude-code'].completed++;
+      } else if (module === 'bootcamp') {
+        migratedLessons.push(lessonId);
+        moduleProgress['bootcamp'].completed++;
+      } else if (module === 'mastery') {
+        migratedLessons.push(lessonId);
+        moduleProgress['mastery'].completed++;
       }
     });
 
     return {
-      completedLessons: v1Data.completedLessons || [],
-      totalLessons: 50,
+      completedLessons: migratedLessons,
+      totalLessons: 48,
       moduleProgress,
       version: 2,
     };

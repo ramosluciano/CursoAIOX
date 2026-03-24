@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, Code2, Zap } from 'lucide-react';
+import { BookOpen, Code2, GraduationCap } from 'lucide-react';
 import { ModuleCard } from '@/components/module/ModuleCard';
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           {/* Básico Claude Code Card */}
           <ModuleCard
-            module="basico"
+            module="basico-claude-code"
             title="Básico Claude Code"
             description="Introdução ao Claude Code"
             lessonCount={8}
@@ -36,9 +36,9 @@ export default function Home() {
             lessonCount={18}
             icon={<Code2 className="w-8 h-8" />}
             href="/bootcamp"
-            gradient="from-aiox-50 to-blue-50"
-            textColor="text-aiox-700"
-            badgeColor="border-aiox-purple"
+            gradient="from-blue-50 to-blue-100"
+            textColor="text-blue-700"
+            badgeColor="border-blue-500"
           />
 
           {/* Mastery Card */}
@@ -47,11 +47,11 @@ export default function Home() {
             title="Mastery"
             description="Programa de Especialização Avançada"
             lessonCount={22}
-            icon={<Zap className="w-8 h-8" />}
+            icon={<GraduationCap className="w-8 h-8" />}
             href="/mastery"
-            gradient="from-purple-50 to-pink-50"
-            textColor="text-aiox-accent"
-            badgeColor="border-aiox-accent"
+            gradient="from-stone-50 to-stone-100"
+            textColor="text-stone-700"
+            badgeColor="border-stone-500"
           />
         </div>
       </section>
@@ -63,7 +63,7 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="p-6 bg-blue-50 rounded-lg border border-blue-200">
-            <Zap className="w-8 h-8 text-blue-600 mb-3" />
+            <Code2 className="w-8 h-8 text-blue-600 mb-3" />
             <h3 className="font-bold text-lg mb-2">Desenvolvimento Full Stack</h3>
             <p className="text-gray-600">
               Domine Next.js, TypeScript, PostgreSQL e práticas modernas de DevOps
@@ -71,7 +71,7 @@ export default function Home() {
           </div>
 
           <div className="p-6 bg-purple-50 rounded-lg border border-purple-200">
-            <Code2 className="w-8 h-8 text-purple-600 mb-3" />
+            <GraduationCap className="w-8 h-8 text-purple-600 mb-3" />
             <h3 className="font-bold text-lg mb-2">Integração com IA</h3>
             <p className="text-gray-600">
               Construa aplicações alimentadas por IA usando Claude API e técnicas avançadas de LLM

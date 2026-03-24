@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { ChevronDown, CheckCircle } from 'lucide-react';
+import { ChevronDown, CheckCircle, BookOpen, Code2, GraduationCap } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 
 export function Sidebar() {
@@ -54,7 +54,10 @@ export function Sidebar() {
             }
             className="w-full flex items-center justify-between px-4 py-2 font-bold text-lg rounded-lg hover:bg-white dark:hover:bg-slate-700 transition-colors text-green-700 dark:text-green-400 group"
           >
-            🌱 Básico
+            <span className="flex items-center gap-2">
+              <BookOpen className="w-5 h-5" />
+              Básico
+            </span>
             <ChevronDown
               className={`w-5 h-5 transition-transform ${
                 expandedModule === 'basico-claude-code' ? 'rotate-180' : ''
@@ -99,9 +102,12 @@ export function Sidebar() {
                 expandedModule === 'bootcamp' ? null : 'bootcamp'
               )
             }
-            className="w-full flex items-center justify-between px-4 py-2 font-bold text-lg rounded-lg hover:bg-white dark:hover:bg-slate-700 transition-colors text-aiox-700 dark:text-aiox-accent group"
+            className="w-full flex items-center justify-between px-4 py-2 font-bold text-lg rounded-lg hover:bg-white dark:hover:bg-slate-700 transition-colors text-blue-700 dark:text-blue-400 group"
           >
-            📚 Bootcamp
+            <span className="flex items-center gap-2">
+              <Code2 className="w-5 h-5" />
+              Bootcamp
+            </span>
             <ChevronDown
               className={`w-5 h-5 transition-transform ${
                 expandedModule === 'bootcamp' ? 'rotate-180' : ''
@@ -146,9 +152,12 @@ export function Sidebar() {
                 expandedModule === 'mastery' ? null : 'mastery'
               )
             }
-            className="w-full flex items-center justify-between px-4 py-2 font-bold text-lg rounded-lg hover:bg-white dark:hover:bg-slate-700 transition-colors text-aiox-600 dark:text-aiox-accent group"
+            className="w-full flex items-center justify-between px-4 py-2 font-bold text-lg rounded-lg hover:bg-white dark:hover:bg-slate-700 transition-colors text-stone-700 dark:text-stone-400 group"
           >
-            🎓 Mastery
+            <span className="flex items-center gap-2">
+              <GraduationCap className="w-5 h-5" />
+              Mastery
+            </span>
             <ChevronDown
               className={`w-5 h-5 transition-transform ${
                 expandedModule === 'mastery' ? 'rotate-180' : ''
@@ -192,7 +201,7 @@ export function Sidebar() {
           href="/projects"
           className="flex items-center gap-2 px-4 py-2 rounded-lg bg-aiox-purple text-white font-semibold hover:bg-aiox-purple/90 transition-colors text-center justify-center"
         >
-          🚀 View Projects
+          🚀 Ver Projetos
         </Link>
       </div>
     </aside>

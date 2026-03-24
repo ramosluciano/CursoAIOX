@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Code2 } from 'lucide-react';
 import { useLessonCompletion } from '@/hooks/useLessonCompletion';
 
 const LESSONS = [
@@ -31,7 +31,10 @@ export default function BootcampPage() {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-aiox-700 mb-4">Bootcamp Profissional AIOX</h1>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <Code2 className="w-10 h-10 text-blue-700" />
+          <h1 className="text-4xl font-bold text-blue-700">Bootcamp Profissional AIOX</h1>
+        </div>
         <p className="text-lg text-gray-600">18 aulas abrangentes cobrindo todo o pipeline de desenvolvimento AIOX</p>
       </div>
 
@@ -45,15 +48,15 @@ export default function BootcampPage() {
               href={`/bootcamp/${lesson.slug}`}
               className={`group p-6 rounded-lg border transition-all duration-300 ${
                 isCompleted
-                  ? 'bg-aiox-50 border-aiox-300 hover:border-aiox-400'
+                  ? 'bg-blue-200 border-blue-400 hover:border-blue-500'
                   : 'bg-white border-gray-200 hover:border-aiox-purple'
               } hover:shadow-lg`}
             >
               <div className="flex items-start gap-4">
                 <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold transition-colors ${
                   isCompleted
-                    ? 'bg-aiox-200 text-aiox-700'
-                    : 'bg-aiox-100 text-aiox-purple group-hover:bg-aiox-purple group-hover:text-white'
+                    ? 'bg-blue-300 text-white'
+                    : 'bg-blue-100 text-blue-700 group-hover:bg-blue-700 group-hover:text-white'
                 }`}>
                   {String(index + 1).padStart(2, '0')}
                 </div>

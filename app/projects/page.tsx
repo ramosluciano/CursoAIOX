@@ -1,4 +1,10 @@
-import { Code2, Zap, Lightbulb, BookOpen } from 'lucide-react';
+'use client';
+
+import { Code2, Zap, Lightbulb, BookOpen, GraduationCap } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
+import { TechnologiesModal } from '@/components/modals/TechnologiesModal';
+import { AgentsModal } from '@/components/modals/AgentsModal';
 
 const PROJECTS = [
   {
@@ -121,6 +127,7 @@ const PROJECTS = [
       'Kubernetes',
       'Claude API',
       'OpenTelemetry',
+      'Zabbix',
     ],
     learningFocus: [
       'Mergulho profundo nos Internals AIOX',
@@ -215,11 +222,13 @@ const PROJECTS = [
 export default function ProjectsPage() {
   const bootcampProjects = PROJECTS.filter((p) => p.module === 'Bootcamp');
   const masteryProjects = PROJECTS.filter((p) => p.module === 'Mastery');
+  const [techModalOpen, setTechModalOpen] = useState(false);
+  const [agentsModalOpen, setAgentsModalOpen] = useState(false);
 
   return (
     <div className="space-y-12">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-aiox-700 mb-4">Projetos do Curso AIOX</h1>
+        <h1 className="text-4xl font-bold text-aiox-700 mb-4">Projetos</h1>
         <p className="text-lg text-gray-600">
           Construa 6 aplicações prontas para produção com complexidade real
         </p>
@@ -229,7 +238,7 @@ export default function ProjectsPage() {
       <section>
         <div className="mb-6">
           <h2 className="text-3xl font-bold text-aiox-700 flex items-center gap-2">
-            <BookOpen className="w-8 h-8" />
+            <Code2 className="w-8 h-8" />
             Projetos Bootcamp
           </h2>
           <p className="text-gray-600 mt-2">
@@ -248,7 +257,7 @@ export default function ProjectsPage() {
       <section className="pt-12 border-t">
         <div className="mb-6">
           <h2 className="text-3xl font-bold text-aiox-600 flex items-center gap-2">
-            <Zap className="w-8 h-8" />
+            <GraduationCap className="w-8 h-8" />
             Projetos Mastery
           </h2>
           <p className="text-gray-600 mt-2">
@@ -270,30 +279,45 @@ export default function ProjectsPage() {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="p-6 bg-blue-50 rounded-lg border border-blue-200">
-            <Code2 className="w-8 h-8 text-blue-600 mb-3" />
+          <Link
+            href="/projects"
+            className="p-6 bg-blue-50 rounded-lg border border-blue-200 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer group"
+          >
+            <Code2 className="w-8 h-8 text-blue-600 mb-3 group-hover:scale-110 transition-transform" />
             <div className="font-bold text-2xl text-blue-600">6</div>
             <p className="text-sm text-gray-600 mt-1">Projetos Totais</p>
-          </div>
+          </Link>
 
-          <div className="p-6 bg-green-50 rounded-lg border border-green-200">
-            <Zap className="w-8 h-8 text-green-600 mb-3" />
-            <div className="font-bold text-2xl text-green-600">20+</div>
+          <button
+            onClick={() => setTechModalOpen(true)}
+            className="p-6 bg-green-50 rounded-lg border border-green-200 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer group text-left"
+          >
+            <Zap className="w-8 h-8 text-green-600 mb-3 group-hover:scale-110 transition-transform" />
+            <div className="font-bold text-2xl text-green-600">30+</div>
             <p className="text-sm text-gray-600 mt-1">Tecnologias</p>
-          </div>
+          </button>
 
-          <div className="p-6 bg-purple-50 rounded-lg border border-purple-200">
-            <Lightbulb className="w-8 h-8 text-purple-600 mb-3" />
-            <div className="font-bold text-2xl text-purple-600">40</div>
+          <Link
+            href="/"
+            className="p-6 bg-purple-50 rounded-lg border border-purple-200 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer group"
+          >
+            <Lightbulb className="w-8 h-8 text-purple-600 mb-3 group-hover:scale-110 transition-transform" />
+            <div className="font-bold text-2xl text-purple-600">48</div>
             <p className="text-sm text-gray-600 mt-1">Aulas</p>
-          </div>
+          </Link>
 
-          <div className="p-6 bg-pink-50 rounded-lg border border-pink-200">
-            <BookOpen className="w-8 h-8 text-pink-600 mb-3" />
-            <div className="font-bold text-2xl text-pink-600">9</div>
+          <button
+            onClick={() => setAgentsModalOpen(true)}
+            className="p-6 bg-pink-50 rounded-lg border border-pink-200 hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer group text-left"
+          >
+            <BookOpen className="w-8 h-8 text-pink-600 mb-3 group-hover:scale-110 transition-transform" />
+            <div className="font-bold text-2xl text-pink-600">12</div>
             <p className="text-sm text-gray-600 mt-1">Agentes AIOX</p>
-          </div>
+          </button>
         </div>
+
+        <TechnologiesModal isOpen={techModalOpen} onClose={() => setTechModalOpen(false)} />
+        <AgentsModal isOpen={agentsModalOpen} onClose={() => setAgentsModalOpen(false)} />
       </section>
     </div>
   );

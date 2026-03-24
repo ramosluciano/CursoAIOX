@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, BookOpen } from 'lucide-react';
 import { useLessonCompletion } from '@/hooks/useLessonCompletion';
 
 const LESSONS = [
@@ -21,7 +21,10 @@ export default function BasicoClaudeCodePage() {
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-green-700 mb-4">Básico Claude Code</h1>
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <BookOpen className="w-10 h-10 text-green-700" />
+          <h1 className="text-4xl font-bold text-green-700">Básico Claude Code</h1>
+        </div>
         <p className="text-lg text-gray-600">8 aulas para dominar Claude Code desde o início</p>
       </div>
 
@@ -35,7 +38,7 @@ export default function BasicoClaudeCodePage() {
               href={`/basico-claude-code/${lesson.slug}`}
               className={`group p-6 rounded-lg border transition-all duration-300 ${
                 isCompleted
-                  ? 'bg-green-50 border-green-300 hover:border-green-400'
+                  ? 'bg-green-100 border-green-400 hover:border-green-500'
                   : 'bg-white border-gray-200 hover:border-green-500'
               } hover:shadow-lg`}
             >
