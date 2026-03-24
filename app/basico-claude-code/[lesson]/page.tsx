@@ -1,8 +1,9 @@
 import { marked } from 'marked';
-import { Code, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Code, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
+import { LessonCompletionButton } from '@/components/LessonCompletionButton';
 
 const BASICO_LESSONS = [
   'aula-01-o-que-e-claude-code',
@@ -119,12 +120,10 @@ export default async function LessonPage({ params }: PageProps) {
         )}
 
         <div className="flex items-center gap-4">
-          <button
-            className="px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 whitespace-nowrap bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-600"
-          >
-            <CheckCircle className="w-5 h-5" />
-            Marcar como Concluída
-          </button>
+          <LessonCompletionButton
+            lessonId={params.lesson}
+            module="basico-claude-code"
+          />
 
           {nextLesson ? (
             <Link
