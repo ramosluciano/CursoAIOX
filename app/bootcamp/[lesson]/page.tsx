@@ -4,6 +4,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import { LessonCompletionButton } from '@/components/LessonCompletionButton';
+import { LessonFeedbackButton } from '@/components/LessonFeedbackButton';
 
 const BOOTCAMP_LESSONS = [
   'aula-01-setup-anatomia',
@@ -155,6 +156,8 @@ export default async function LessonPage({ params }: PageProps) {
           )}
         </div>
       </div>
+
+      <LessonFeedbackButton module="bootcamp" lesson={params.lesson} />
     </article>
   );
 }

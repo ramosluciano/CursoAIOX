@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// Feedback Categories (predefined, normalizadas)
+// ============================================================================
+model FeedbackCategory {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  color       String    @default("gray")
+  icon        String?
+
+  feedbacks   Feedback[]
+  stats       FeedbackStats[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+}
+
+// ============================================================================
+// Feedback (dados do usuário)
+// ============================================================================
+model Feedback {
+  id          String    @id @default(cuid())
+
+  module      String
+  lesson      String
+
+  category    FeedbackCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String
+
+  text        String    @db.Text
+  userEmail   String?
+  ipAddress   String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([module])
+  @@index([lesson])
+  @@index([categoryId])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// Feedback Stats (agregações para performance)
+// ============================================================================
+model FeedbackStats {
+  id          String    @id @default(cuid())
+
+  module      String
+  lesson      String
+  category    FeedbackCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String
+
+  count       Int       @default(1)
+
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([module, lesson, categoryId])
+  @@index([module, lesson])
+}

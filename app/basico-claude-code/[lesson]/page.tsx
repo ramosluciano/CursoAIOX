@@ -4,6 +4,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import { LessonCompletionButton } from '@/components/LessonCompletionButton';
+import { LessonFeedbackButton } from '@/components/LessonFeedbackButton';
 
 const BASICO_LESSONS = [
   'aula-01-o-que-e-claude-code',
@@ -145,6 +146,8 @@ export default async function LessonPage({ params }: PageProps) {
           )}
         </div>
       </div>
+
+      <LessonFeedbackButton module="basico-claude-code" lesson={params.lesson} />
     </article>
   );
 }

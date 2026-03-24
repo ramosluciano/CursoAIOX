@@ -4,6 +4,7 @@ import Link from 'next/link';
 import fs from 'fs';
 import path from 'path';
 import { LessonCompletionButton } from '@/components/LessonCompletionButton';
+import { LessonFeedbackButton } from '@/components/LessonFeedbackButton';
 
 const MASTERY_LESSONS = [
   'mastery-aula-01-internals',
@@ -159,6 +160,8 @@ export default async function LessonPage({ params }: PageProps) {
           )}
         </div>
       </div>
+
+      <LessonFeedbackButton module="mastery" lesson={params.lesson} />
     </article>
   );
 }
