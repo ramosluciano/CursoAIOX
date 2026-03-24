@@ -148,3 +148,54 @@ jobs:
           echo "Check: https://vercel.com/dashboard/CursoAIOX/deployments"
           exit 0
 
+  # ============================================================================
+  # 6. SLACK NOTIFICATION (Optional - requires secret)
+  # ============================================================================
+  notify:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    needs: [build, test-deployment]
+    if: always() && secrets.SLACK_WEBHOOK != ''
+    steps:
+      - name: Send Slack notification
+        if: secrets.SLACK_WEBHOOK != ''
+        run: |
+          curl -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "text": "AIOX Course Platform - Deployment Status",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*AIOX Course Platform*\n*Branch:* ${{ github.ref_name }}\n*Status:* ${{ job.status }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View on GitHub"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    },
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "Visit Application"
+                      },
+                      "url": "https://curso-aiox.vercel.app"
+                    }
+                  ]
+                }
+              ]
+            }'
+      - name: Notification skipped
+        if: secrets.SLACK_WEBHOOK == ''
+        run: echo "ℹ️ Slack notification skipped - SLACK_WEBHOOK secret not configured"
+
