@@ -50,7 +50,17 @@ export default async function LessonPage({ params }: PageProps) {
   }
 
   const content = fs.readFileSync(filePath, 'utf-8');
-  const htmlContent = await marked.parse(content) as string;
+  let htmlContent = await marked.parse(content) as string;
+
+  // Remove disabled attributes from checkboxes to make them interactive
+  htmlContent = htmlContent.replace(
+    /\s+disabled(?=[\s/>])/g,
+    ''
+  );
+
+  // Remove the first h1 title from content to avoid duplication (title is shown in header)
+  htmlContent = htmlContent.replace(/^<h1[^>]*>.*?<\/h1>\s*/i, '');
+
   const title = extractTitle(content);
   const lessonIndex = BASICO_LESSONS.indexOf(params.lesson);
   const nextLesson =

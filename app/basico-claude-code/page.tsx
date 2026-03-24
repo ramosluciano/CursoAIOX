@@ -1,4 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { CheckCircle } from 'lucide-react';
 
 const LESSONS = [
   { slug: 'aula-01-o-que-e-claude-code', title: '01. O que é Claude Code?', description: 'Introdução ao Claude Code' },
@@ -12,6 +16,33 @@ const LESSONS = [
 ];
 
 export default function BasicoClaudeCodePage() {
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+
+    const loadCompleted = () => {
+      const progress = localStorage.getItem('courseProgress');
+      if (progress) {
+        const progressData = JSON.parse(progress);
+        const completed = new Set<string>(progressData.completedLessons || []);
+        setCompletedLessons(completed);
+      }
+    };
+
+    loadCompleted();
+
+    const handleProgressUpdate = () => {
+      loadCompleted();
+    };
+
+    window.addEventListener('progressUpdate', handleProgressUpdate);
+    return () => {
+      window.removeEventListener('progressUpdate', handleProgressUpdate);
+    };
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="text-center">
@@ -20,26 +51,57 @@ export default function BasicoClaudeCodePage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {LESSONS.map((lesson, index) => (
-          <Link
-            key={lesson.slug}
-            href={`/basico-claude-code/${lesson.slug}`}
-            className="group p-6 bg-white border border-gray-200 rounded-lg hover:border-green-500 hover:shadow-lg transition-all duration-300"
-          >
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-green-100 text-green-700 rounded-lg flex items-center justify-center font-bold group-hover:bg-green-700 group-hover:text-white transition-colors">
-                {String(index + 1).padStart(2, '0')}
+        {LESSONS.map((lesson, index) => {
+          const isCompleted = isMounted && completedLessons.has(`basico-claude-code/${lesson.slug}`);
+
+          return (
+            <Link
+              key={lesson.slug}
+              href={`/basico-claude-code/${lesson.slug}`}
+              className={`group p-6 rounded-lg border transition-all duration-300 ${
+                isCompleted
+                  ? 'bg-green-50 border-green-300 hover:border-green-400'
+                  : 'bg-white border-gray-200 hover:border-green-500'
+              } hover:shadow-lg`}
+            >
+              <div className="flex items-start gap-4">
+                <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-bold transition-colors ${
+                  isCompleted
+                    ? 'bg-green-200 text-green-700'
+                    : 'bg-green-100 text-green-700 group-hover:bg-green-700 group-hover:text-white'
+                }`}>
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-start gap-2">
+                    <div className="flex-1">
+                      <h3 className={`font-bold text-lg transition-colors ${
+                        isCompleted
+                          ? 'text-green-700 line-through'
+                          : 'text-gray-900 group-hover:text-green-700'
+                      }`}>
+                        {lesson.title}
+                      </h3>
+                      <p className={`text-sm mt-1 ${
+                        isCompleted ? 'text-green-600' : 'text-gray-600'
+                      }`}>
+                        {lesson.description}
+                      </p>
+                    </div>
+                    {isCompleted && (
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                    )}
+                  </div>
+                </div>
+                <span className={`font-semibold opacity-0 group-hover:opacity-100 transition-opacity ${
+                  isCompleted ? 'text-green-600' : 'text-green-700'
+                }`}>
+                  →
+                </span>
               </div>
-              <div className="flex-1">
-                <h3 className="font-bold text-lg text-gray-900 group-hover:text-green-700 transition-colors">
-                  {lesson.title}
-                </h3>
-                <p className="text-sm text-gray-600 mt-1">{lesson.description}</p>
-              </div>
-              <span className="text-green-700 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
