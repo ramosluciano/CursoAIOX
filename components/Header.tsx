@@ -33,6 +33,7 @@ export function Header() {
   const isBootcamp = pathname.startsWith('/bootcamp');
   const isMastery = pathname.startsWith('/mastery');
   const isProjects = pathname.startsWith('/projects');
+  const isFeedbacks = pathname.startsWith('/admin/feedbacks');
 
   return (
     <header className="border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 sticky top-0 z-30 transition-colors">
@@ -82,6 +83,16 @@ export function Header() {
             }`}
           >
             Projetos
+          </Link>
+          <Link
+            href="/admin/feedbacks"
+            className={`font-medium transition-colors ${
+              isFeedbacks
+                ? 'text-orange-600 dark:text-orange-400 border-b-2 border-orange-600 dark:border-orange-400'
+                : 'text-gray-600 dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-400'
+            }`}
+          >
+            Feedbacks
           </Link>
         </nav>
 

@@ -4,6 +4,20 @@ import { useState, useEffect } from 'react';
 import { Trash2, Download, Filter } from 'lucide-react';
 import Link from 'next/link';
 
+// Mapa de cores para categorias (Tailwind CSS classes)
+const CATEGORY_COLOR_MAP: Record<string, { bg: string; text: string }> = {
+  red: { bg: 'bg-red-600', text: 'text-white' },
+  yellow: { bg: 'bg-yellow-600', text: 'text-white' },
+  blue: { bg: 'bg-blue-600', text: 'text-white' },
+  purple: { bg: 'bg-purple-600', text: 'text-white' },
+  orange: { bg: 'bg-orange-600', text: 'text-white' },
+  pink: { bg: 'bg-pink-600', text: 'text-white' },
+  amber: { bg: 'bg-amber-600', text: 'text-white' },
+  slate: { bg: 'bg-slate-600', text: 'text-white' },
+  green: { bg: 'bg-green-600', text: 'text-white' },
+  indigo: { bg: 'bg-indigo-600', text: 'text-white' },
+};
+
 interface FeedbackItem {
   id: string;
   module: string;
@@ -218,7 +232,7 @@ export default function FeedbacksAdminPage() {
                     <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{feedback.module}</td>
                     <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{feedback.lesson}</td>
                     <td className="px-6 py-4 text-sm">
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold text-white bg-${feedback.category.color}-600`}>
+                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${CATEGORY_COLOR_MAP[feedback.category.color]?.bg || 'bg-gray-600'} ${CATEGORY_COLOR_MAP[feedback.category.color]?.text || 'text-white'}`}>
                         {feedback.category.name}
                       </span>
                     </td>
