@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BookOpen, Code2, GraduationCap } from 'lucide-react';
+import { BookOpen, Code2, GraduationCap, BarChart3 } from 'lucide-react';
 import { ModuleCard } from '@/components/module/ModuleCard';
 
 export default function Home() {
@@ -101,6 +101,17 @@ export default function Home() {
           className="flex items-center justify-center gap-2 mx-auto w-fit px-6 py-3 bg-aiox-purple text-white rounded-lg hover:bg-aiox-purple/90 transition-colors font-semibold"
         >
           Ver Todos os Projetos →
+        </Link>
+      </section>
+
+      {/* Admin Link */}
+      <section className="py-8 border-t pt-8 text-center">
+        <Link
+          href="/admin/feedbacks"
+          className="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-aiox-purple dark:hover:text-aiox-purple transition-colors"
+        >
+          <BarChart3 className="w-4 h-4" />
+          Painel de Feedbacks
         </Link>
       </section>
     </div>
