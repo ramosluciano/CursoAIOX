@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Trash2, Download, Filter } from 'lucide-react';
-import Link from 'next/link';
 
 // Mapa de cores para categorias (Tailwind CSS classes)
 const CATEGORY_COLOR_MAP: Record<string, { bg: string; text: string }> = {
@@ -285,13 +284,6 @@ export default function FeedbacksAdminPage() {
           </div>
         </>
       )}
-
-      {/* Voltar */}
-      <div>
-        <Link href="/" className="text-aiox-purple hover:underline">
-          ← Voltar para home
-        </Link>
-      </div>
     </div>
   );
 }
